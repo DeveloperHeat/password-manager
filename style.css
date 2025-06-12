@@ -1,0 +1,54 @@
+body {
+  font-family: sans-serif;
+  background-color: #f0f0f5;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.generator {
+    margin-top: 2em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+  }
+  .generator label {
+    display: block;
+    margin-top: 0.5em;
+  }
+
+.tester {
+    margin-top: 2em;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff3f3;
+  }
+

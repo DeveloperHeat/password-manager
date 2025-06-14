@@ -1,5 +1,3 @@
-// crypto.js
-
 async function deriveKey(password, salt) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(

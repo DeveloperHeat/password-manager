@@ -45,6 +45,28 @@ async function displayVault() {
   }
 }
 
+async function checkBreach() {
+    const password = document.getElementById("breach-password").value;
+    const hashBuffer = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(password));
+    const fullHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+    const prefix = fullHash.slice(0, 5);
+    const suffix = fullHash.slice(5);
+
+    const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+    const text = await response.text();
+    const found = text.includes(suffix);
+
+    const result = document.getElementById("breach-result");
+    if (found) {
+        result.innerHTML = "This password has been found in previous breaches!";
+        result.style.color = "red";
+    } else {
+        result.innerHTML = "This password has NOT been found in any known breach.";
+        result.style.color = "green";
+    }
+}
+
+
 function isFakeRandom(pw) {
     const keyboardPatterns = ["qwerty", "asdf", "zxcv", "1234", "7890"];
     return keyboardPatterns.some(seq => pw.toLowerCase().includes(seq)) ||

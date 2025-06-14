@@ -52,3 +52,12 @@ ul {
     background: #fff3f3;
   }
 
+.breach-checker {
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 15px;
+}
+.breach-checker input {
+  margin-top: 5px;
+  margin-right: 10px;
+}

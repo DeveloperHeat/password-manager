@@ -62,6 +62,15 @@
             </label>
             <button onclick="testPassword()">Run Attack</button>
             <p><strong>Result:</strong> <span id="crack-result">Not tested</span></p>
+        <div class="breach-checker">
+            <h2>Dark Web Password Breach Check</h2>
+            <label>
+                Enter Password to Check:
+                <input type="password" id="breach-password" />
+            </label>
+            <button onclick="checkBreach()">Check</button>
+            <p><strong>Status:</strong> <span id="breach-result">Not checked</span></p>
+        </div>
         </div>
         <div class="vault">
             <h2>Stored Passwords</h2>

@@ -368,7 +368,7 @@ function testPassword() {
   
   if (aiCrackable(pw)) {
     document.getElementById("crack-result").innerHTML =
-        `This password is crackable by AI models trained on leaked datasets.<br>` +
+        `This password is **crackable by AI models trained on leaked datasets**.<br>` +
         `Estimated crack time: < 2 minutes<br>` +
         `Strength rating: Moderate (AI attack mode)`;
     return;

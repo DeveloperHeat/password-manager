@@ -1,162 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Encrypted Password Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VaultX - Secure Password Manager</title>
     <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-    <h1>Encrypted Password Manager</h1>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>VaultX</h1>
+      <p class="subtitle">Your Secure, Client-Side Password Manager</p>
+    </header>
 
-    <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.19.0/dist/argon2.min.js"></script>
-    <script src="zero.js"></script>
-  
-    <div id="unlock-section">
-        <h2>Enter Master Password</h2>
-        <input type="password" id="master-password" placeholder="Master Password" />
-        <button onclick="unlockVault()">Unlock</button>
-        <p><a href="#" onclick="showSetMasterPassword()">Set New Master Password</a> (if you don't have one or need to reset)</p>
-        <p id="unlock-error" style="color: red; display: none;">Incorrect master password.</p>
-    </div>
-
-    <div id="set-master-password-section" style="display: none;">
-        <h2>Set New Master Password</h2>
-        <input type="password" id="new-master-password" placeholder="New Master Password" />
-        <input type="password" id="confirm-new-master-password" placeholder="Confirm New Master Password" />
-        <button onclick="setNewMasterPassword()">Set Password</button>
-        <p><a href="#" onclick="hideSetMasterPassword()">Cancel</a></p>
-    </div>
-
-    <div class="container" style="display: none;">
-        <div class="add-password">
-            <h2>Add New Password</h2>
-            <input type="text" id="site" placeholder="Site (e.g. gmail.com)" />
-            <input type="text" id="username" placeholder="Username" />
-            <input type="password" id="password" placeholder="Password" />
-            <button onclick="addPassword()">Save</button>
+    <main id="app-container">
+      <div id="unlock-section" class="auth-container">
+        <div class="card">
+          <h2>Unlock Vault</h2>
+          <p>Enter your master password to continue.</p>
+          <input
+            type="password"
+            id="master-password"
+            placeholder="Master Password"
+            class="input-field"
+          />
+          <button onclick="unlockVault()" class="btn btn-primary">
+            Unlock
+          </button>
+          <p id="unlock-error" class="error-message" style="display: none">
+            Incorrect master password or corrupted data.
+          </p>
+          <p class="auth-link">
+            <a href="#" onclick="showSetMasterPassword()"
+              >Set a New Master Password</a
+            >
+          </p>
         </div>
-        <div class="generator">
-            <h2>Generate Secure Password</h2>
-            <label>
-                Length:
-                <input type="number" id="gen-length" min="8" max="64" value="16">
-            </label>
-            <label>
-                <input type="checkbox" id="gen-symbols" checked> Include Symbols
-            </label>
-            <label>
-                <input type="checkbox" id="gen-numbers" checked> Include Numbers
-            </label>
-            <label>
-                <input type="checkbox" id="gen-uppercase" checked> Include Uppercase
-            </label>
-            <button onclick="generatePassword()">Generate</button>
-            <p><strong>Password:</strong> <span id="generated-password"></span></p>
+      </div>
+
+      <div
+        id="set-master-password-section"
+        class="auth-container"
+        style="display: none"
+      >
+        <div class="card">
+          <h2>Set Master Password</h2>
+          <p>Choose a strong, memorable password.</p>
+          <input
+            type="password"
+            id="new-master-password"
+            placeholder="New Master Password"
+            class="input-field"
+          />
+          <input
+            type="password"
+            id="confirm-new-master-password"
+            placeholder="Confirm New Password"
+            class="input-field"
+          />
+          <button onclick="setNewMasterPassword()" class="btn btn-primary">
+            Set and Continue
+          </button>
+          <p class="auth-link">
+            <a href="#" onclick="hideSetMasterPassword()">Cancel</a>
+          </p>
         </div>
-        <div class="tester">
-            <h2>Password Cracking Simulation</h2>
-            <label>
-                Test Password:
-                <input type="text" id="test-password">
-            </label>
-            <button onclick="testPassword()">Run Attack</button>
-            <p><strong>Result:</strong> <span id="crack-result">Not tested</span></p>
-        <div class="breach-checker">
-            <h2>Scan For Breached Passwords</h2>
-            <label>
-                Enter Password to Check:
-                <input type="password" id="breach-password" />
-            </label>
-            <button onclick="checkBreach()">Check</button>
-            <p><strong>Status:</strong> <span id="breach-result">Not checked</span></p>
+      </div>
+
+      <div class="container" style="display: none">
+        <div class="main-column">
+          <div class="card">
+            <h2 class="card-title">Add New Password</h2>
+            <div class="form-group">
+              <label for="site">Website or Service</label>
+              <input
+                type="text"
+                id="site"
+                placeholder="e.g., google.com"
+                class="input-field"
+              />
+            </div>
+            <div class="form-group">
+              <label for="username">Username or Email</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="e.g., user@example.com"
+                class="input-field"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter password or generate one"
+                class="input-field"
+              />
+            </div>
+            <button onclick="addPassword()" class="btn btn-primary">
+              Save Credential
+            </button>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">Stored Passwords</h2>
+            <div class="vault">
+              <ul id="password-list"></ul>
+            </div>
+          </div>
         </div>
+
+        <div class="sidebar-column">
+          <div class="card tool-card">
+            <h3 class="card-title">Passphrase Generator</h3>
+            <div class="form-group">
+              <label for="theme-selector">Theme</label>
+              <select id="theme-selector" class="input-field">
+                <option value="animals">Animals + Colors</option>
+                <option value="nz">New Zealand Theme</option>
+                <option value="custom">Custom Words</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="custom-words-input"
+                >Custom Word List (comma-separated)</label
+              >
+              <textarea id="custom-words-input" rows="2" class="input-field">
+Alpha,Bravo,Charlie,Delta,Echo</textarea
+              >
+              <button
+                onclick="updateCustomWords()"
+                class="btn btn-secondary btn-small"
+              >
+                Update Words
+              </button>
+            </div>
+            <button onclick="generatePassphrase()" class="btn btn-primary">
+              Generate Passphrase
+            </button>
+            <p class="generated-passphrase-display">
+              <strong>Generated:</strong>
+              <span id="generated-passphrase"></span>
+            </p>
+          </div>
+
+          <div class="card tool-card">
+            <h3 class="card-title">Password Security Audit</h3>
+            <div class="form-group">
+              <label for="test-password">Test a Password</label>
+              <input type="text" id="test-password" class="input-field" />
+            </div>
+            <button onclick="testPassword()" class="btn btn-secondary">
+              Analyze Strength
+            </button>
+            <div id="crack-result" class="result-box">Not tested</div>
+          </div>
+
+          <div class="card tool-card">
+            <h3 class="card-title">Data Breach Check</h3>
+            <div class="form-group">
+              <label for="breach-password"
+                >Check if Password was in a Breach</label
+              >
+              <input type="password" id="breach-password" class="input-field" />
+            </div>
+            <button onclick="checkBreach()" class="btn btn-secondary">
+              Check Breach Status
+            </button>
+            <div id="breach-result" class="result-box">Not checked</div>
+          </div>
         </div>
-        <div class="vault">
-            <h2>Stored Passwords</h2>
-            <ul id="password-list"></ul>
-        </div>
-    </div>
-
-    <script>
-        window.masterPassword = "";
-        let vaultData = null; 
-
-        async function unlockVault() {
-            const input = document.getElementById("master-password");
-            const enteredPassword = input.value;
-            try {
-                const encryptedVault = localStorage.getItem("vaultx");
-                if (encryptedVault) {
-                    vaultData = await decryptData(JSON.parse(encryptedVault), enteredPassword);
-                    masterPassword = enteredPassword;
-                    await displayVault();
-                    document.getElementById("unlock-section").style.display = "none";
-                    document.getElementById("set-master-password-section").style.display = "none";
-                    document.querySelector(".container").style.display = "flex";
-                    document.getElementById("unlock-error").style.display = "none"; 
-                } else {
-                    
-                    showSetMasterPassword();
-                }
-            } catch (err) {
-                console.error("Unlock failed:", err);
-                document.getElementById("unlock-error").style.display = "block"; 
-            } finally {
-                input.value = ""; 
-            }
-        }
-
-        function showSetMasterPassword() {
-            document.getElementById("unlock-section").style.display = "none";
-            document.getElementById("set-master-password-section").style.display = "block";
-            document.querySelector(".container").style.display = "none";
-            document.getElementById("unlock-error").style.display = "none"; 
-        }
-
-        function hideSetMasterPassword() {
-            document.getElementById("unlock-section").style.display = "block";
-            document.getElementById("set-master-password-section").style.display = "none";
-            document.getElementById("unlock-error").style.display = "none"; // Hide error when going back to unlock
-            if (masterPassword) {
-                document.querySelector(".container").style.display = "flex";
-            }
-        }
-
-        async function setNewMasterPassword() {
-            const newPasswordInput = document.getElementById("new-master-password");
-            const confirmPasswordInput = document.getElementById("confirm-new-master-password");
-            const newPassword = newPasswordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-
-            if (newPassword !== confirmPassword) {
-                alert("New passwords do not match!");
-                return;
-            }
-
-            if (!newPassword) {
-                alert("Please enter a new master password.");
-                return;
-            }
-
-            masterPassword = newPassword; 
-            await saveVault(vaultData || []); 
-            alert("Master password has been set!");
-            newPasswordInput.value = "";
-            confirmPasswordInput.value = "";
-            document.getElementById("unlock-section").style.display = "none";
-            document.getElementById("set-master-password-section").style.display = "none";
-            document.querySelector(".container").style.display = "flex";
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("unlock-section").style.display = "block";
-            document.getElementById("set-master-password-section").style.display = "none";
-            document.querySelector(".container").style.display = "none";
-        });
-    </script>
+      </div>
+    </main>
 
     <script src="crypto.js"></script>
     <script src="script.js"></script>
-</body>
+    <script>
+      // All the inline script from the original file remains here
+      // No changes needed to the core logic
+      window.masterPassword = "";
+      let vaultData = null;
+
+      async function unlockVault() {
+        const input = document.getElementById("master-password");
+        const enteredPassword = input.value;
+        try {
+          const encryptedVault = localStorage.getItem("vaultx");
+          if (encryptedVault) {
+            vaultData = await decryptData(
+              JSON.parse(encryptedVault),
+              enteredPassword
+            );
+            masterPassword = enteredPassword;
+            await displayVault();
+            document.getElementById("unlock-section").style.display = "none";
+            document.getElementById(
+              "set-master-password-section"
+            ).style.display = "none";
+            document.querySelector(".container").style.display = "flex";
+            document.getElementById("unlock-error").style.display = "none";
+          } else {
+            showSetMasterPassword();
+          }
+        } catch (err) {
+          console.error("Unlock failed:", err);
+          document.getElementById("unlock-error").style.display = "block";
+        } finally {
+          input.value = "";
+        }
+      }
+
+      function showSetMasterPassword() {
+        document.getElementById("unlock-section").style.display = "none";
+        document.getElementById("set-master-password-section").style.display =
+          "block";
+        document.querySelector(".container").style.display = "none";
+        document.getElementById("unlock-error").style.display = "none";
+      }
+
+      function hideSetMasterPassword() {
+        document.getElementById("unlock-section").style.display = "block";
+        document.getElementById("set-master-password-section").style.display =
+          "none";
+        document.getElementById("unlock-error").style.display = "none";
+        if (masterPassword) {
+          document.querySelector(".container").style.display = "flex";
+        }
+      }
+
+      async function setNewMasterPassword() {
+        const newPasswordInput = document.getElementById("new-master-password");
+        const confirmPasswordInput = document.getElementById(
+          "confirm-new-master-password"
+        );
+        const newPassword = newPasswordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (newPassword !== confirmPassword) {
+          alert("New passwords do not match!");
+          return;
+        }
+
+        if (!newPassword) {
+          alert("Please enter a new master password.");
+          return;
+        }
+
+        masterPassword = newPassword;
+        vaultData = vaultData || []; // Ensure vaultData is an array
+        await saveVault(vaultData);
+        alert("Master password has been set!");
+        newPasswordInput.value = "";
+        confirmPasswordInput.value = "";
+
+        // Unlock the vault immediately
+        await displayVault();
+        document.getElementById("unlock-section").style.display = "none";
+        document.getElementById("set-master-password-section").style.display =
+          "none";
+        document.querySelector(".container").style.display = "flex";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("unlock-section").style.display = "flex";
+        document.getElementById("set-master-password-section").style.display =
+          "none";
+        document.querySelector(".container").style.display = "none";
+      });
+    </script>
+  </body>
 </html>

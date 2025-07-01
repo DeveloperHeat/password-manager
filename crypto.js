@@ -13,7 +13,7 @@ async function deriveKey(password, salt) {
       name: "PBKDF2",
       salt,
       iterations: 100000,
-      hash: "SHA-256"
+      hash: "SHA-256",
     },
     keyMaterial,
     { name: "AES-GCM", length: 256 },
@@ -38,7 +38,7 @@ async function encryptData(data, password) {
   return {
     ciphertext: arrayBufferToBase64(ciphertext),
     iv: arrayBufferToBase64(iv),
-    salt: arrayBufferToBase64(salt)
+    salt: arrayBufferToBase64(salt),
   };
 }
 
@@ -67,6 +67,6 @@ function arrayBufferToBase64(buffer) {
 function base64ToArrayBuffer(base64) {
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
-  binary.split("").forEach((char, i) => bytes[i] = char.charCodeAt(0));
+  binary.split("").forEach((char, i) => (bytes[i] = char.charCodeAt(0)));
   return bytes.buffer;
 }

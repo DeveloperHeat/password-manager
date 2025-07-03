@@ -4,7 +4,7 @@
   --primary-hover: #005ecb;
   --secondary-color: #6c757d;
   --secondary-hover: #5a6268;
-  --background-color: #f8f9fa;
+  --background-color: #f3f4f5;
   --card-background: #ffffff;
   --text-color: #212529;
   --subtle-text: #6c757d;
@@ -122,9 +122,16 @@ body {
   font-size: 0.9rem;
 }
 
+.form-group input[type="checkbox"] {
+  width: auto; /* Override default input-field width for checkboxes */
+  margin-right: 5px;
+}
+
 .input-field,
 select.input-field,
-textarea.input-field {
+textarea.input-field,
+input[type="file"].input-field {
+  /* Added file input styling */
   display: block;
   width: 100%;
   padding: 12px;
@@ -133,6 +140,9 @@ textarea.input-field {
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: var(
+    --background-color
+  ); /* For file input, gives it a background */
 }
 
 .input-field:focus {
@@ -152,6 +162,8 @@ textarea.input-field {
   transition: background-color 0.2s, transform 0.1s;
   width: 100%;
   margin-top: 10px;
+  /* Ensure consistent spacing between buttons if they are inline-block */
+  display: block; /* Default to block, specific overrides for small */
 }
 
 .btn:hover {
@@ -182,6 +194,16 @@ textarea.input-field {
   font-size: 0.8rem;
   margin-top: 5px;
   width: auto;
+  display: inline-block; /* Make small buttons inline */
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
 }
 
 /* Stored Passwords List */
@@ -190,6 +212,9 @@ textarea.input-field {
   padding: 0;
   max-height: 400px;
   overflow-y: auto;
+  border: 1px solid var(--border-color); /* Added border for the list */
+  border-radius: 8px;
+  margin-top: 15px; /* Spacing after search input */
 }
 
 #password-list li {
@@ -199,6 +224,14 @@ textarea.input-field {
   justify-content: space-between;
   align-items: center;
   word-break: break-all;
+  flex-wrap: wrap; /* Allow list items to wrap on small screens */
+  gap: 10px; /* Space between text and buttons */
+}
+
+#password-list li > span {
+  /* Styling for the text container */
+  flex-grow: 1;
+  min-width: 150px; /* Ensure text takes up enough space before wrapping */
 }
 
 #password-list li:last-child {
@@ -216,12 +249,29 @@ textarea.input-field {
   word-wrap: break-word;
 }
 
+/* Added for feedback in password strength */
+.result-box ul {
+  list-style: disc inside;
+  margin: 10px 0 0 0;
+  padding-left: 0;
+}
+.result-box ul li {
+  font-size: 0.9em;
+  margin-bottom: 3px;
+  color: var(--subtle-text);
+}
+
 .generated-passphrase-display {
   margin-top: 15px;
   font-size: 1.1rem;
-  word-break: break-all;
+  word-break: break-word;
   color: var(--success-color);
   font-weight: 600;
+  border: 1px dashed var(--success-color);
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(40, 167, 69, 0.05);
+  display: block; /* Ensures it takes full width for padding */
 }
 
 .generated-passphrase-display span {
@@ -247,6 +297,87 @@ textarea.input-field {
   border-color: rgba(40, 167, 69, 0.3);
 }
 
+/* Password Strength Meter Styles */
+.password-strength-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#password-strength-meter {
+  height: 8px;
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+#password-strength-meter::before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+/* In style.css, add these for the AI phishing display */
+#ai-phishing-result p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+}
+.ai-risk-level-text {
+  font-weight: bold;
+}
+
+/* Color coding for AI risk levels */
+.ai-risk-level-text.risk-very-low-risk,
+.ai-risk-level-text.risk-low-risk {
+  color: var(--success-color); /* Green */
+}
+.ai-risk-level-text.risk-medium-risk {
+  color: var(--warning-color); /* Orange */
+}
+.ai-risk-level-text.risk-high-risk,
+.ai-risk-level-text.risk-very-high-risk {
+  color: var(--danger-color); /* Red */
+}
+
+/* Strength levels */
+#password-strength-meter.strength-0::before {
+  width: 0%;
+  background-color: transparent;
+}
+#password-strength-meter.strength-1::before {
+  width: 20%;
+  background-color: var(--danger-color); /* Very Weak - Red */
+}
+#password-strength-meter.strength-2::before {
+  width: 40%;
+  background-color: var(--danger-color); /* Weak - Red */
+}
+#password-strength-meter.strength-3::before {
+  width: 60%;
+  background-color: var(--warning-color); /* Moderate - Orange */
+}
+#password-strength-meter.strength-4::before {
+  width: 80%;
+  background-color: var(--success-color); /* Strong - Green */
+}
+#password-strength-meter.strength-5::before {
+  width: 100%;
+  background-color: var(--success-color); /* Very Strong - Green */
+}
+
+#password-strength-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-width: 80px; /* Ensure text space */
+  text-align: right;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
@@ -254,5 +385,16 @@ textarea.input-field {
   }
   .app-header h1 {
     font-size: 2rem;
+  }
+  #password-list li {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    align-items: flex-start; /* Align text and buttons to the left */
+  }
+  #password-list li > span {
+    width: 100%; /* Text takes full width */
+    margin-bottom: 10px; /* Space before buttons */
+  }
+  #password-list li .btn-small {
+    width: calc(50% - 2.5px); /* Two buttons per row */
   }
 }

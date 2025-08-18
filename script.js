@@ -825,32 +825,20 @@ function entropyRating(entropy, pw) {
   return { rating, feedback: feedback.length ? feedback : ["Looks good!"] };
 }
 
+// Add or modify the testPassword function with the following content
 function testPassword() {
   const pw = document.getElementById("test-password").value;
   const crackResultElement = document.getElementById("crack-result");
   const meter = document.getElementById("password-strength-meter");
   const meterText = document.getElementById("password-strength-text");
 
-  const updateMeter = (rating = "") => {
-    let level = 0;
-    switch (rating) {
-      case "Very Weak":
-        level = 1;
-        break;
-      case "Weak":
-        level = 2;
-        break;
-      case "Moderate":
-        level = 3;
-        break;
-      case "Strong":
-        level = 4;
-        break;
-      case "Very Strong":
-        level = 5;
-        break;
-    }
-    meter.className = `strength-${level}`;
+  const updateMeter = (
+    rating = "",
+    meterWidth = "0%",
+    meterColor = "transparent"
+  ) => {
+    meter.style.width = meterWidth;
+    meter.style.backgroundColor = meterColor;
     meterText.textContent = rating;
   };
 
@@ -860,16 +848,65 @@ function testPassword() {
     return;
   }
 
+  // Assuming calculateEntropy, entropyRating, and estimateCrackTime functions are defined elsewhere in script.js
   const entropy = calculateEntropy(pw);
   const { rating, feedback } = entropyRating(entropy, pw);
   const time = estimateCrackTime(entropy);
 
-  updateMeter(rating);
+  // Stricter logic for visual meter and rating
+  let visualRating = "";
+  let meterWidth = "0%";
+  let meterColor = "transparent";
+
+  if (entropy < 30) {
+    visualRating = "Extremely Weak";
+    meterColor = "var(--danger-color)";
+    meterWidth = "10%";
+  } else if (entropy < 60) {
+    visualRating = "Weak";
+    meterColor = "var(--danger-color)";
+    meterWidth = "30%";
+  } else if (entropy < 80) {
+    visualRating = "Moderate";
+    meterColor = "var(--warning-color)";
+    meterWidth = "60%";
+  } else if (entropy < 100) {
+    visualRating = "Strong";
+    meterColor = "var(--primary-color)";
+    meterWidth = "85%";
+  } else {
+    visualRating = "Very Strong";
+    meterColor = "var(--success-color)";
+    meterWidth = "100%";
+  }
+
+  updateMeter(visualRating, meterWidth, meterColor);
+
+  // Update the feedback text for a harsher tone
+  let harsherFeedback = "";
+  if (visualRating === "Extremely Weak") {
+    harsherFeedback =
+      "This password is a critical security risk and should not be used anywhere. It is trivial to crack.";
+  } else if (visualRating === "Weak") {
+    harsherFeedback =
+      "This password is highly vulnerable to common attacks. It is not secure enough for any important account.";
+  } else if (visualRating === "Moderate") {
+    harsherFeedback =
+      "This password offers minimal protection. It is only suitable for low-risk accounts and should be significantly improved for anything sensitive.";
+  } else if (visualRating === "Strong") {
+    harsherFeedback =
+      "This password provides good protection, but could still be improved with more length and complexity to withstand advanced attacks.";
+  } else if (visualRating === "Very Strong") {
+    harsherFeedback =
+      "This password is very difficult to crack and provides excellent security. This is an ideal password for all your accounts.";
+  }
+
   crackResultElement.innerHTML =
-    `<strong>Strength: ${rating}</strong><br>` +
+    `<strong>Strength: ${visualRating}</strong><br>` +
     `Estimated crack time: ${time}<br>` +
     `Entropy: ${entropy.toFixed(2)} bits.<br>` +
-    `Feedback: <ul>${feedback.map((f) => `<li>${f}</li>`).join("")}</ul>`;
+    `Feedback: <ul>${feedback.map((f) => `<li>${f}</li>`).join("")}</ul>` +
+    `<strong>General Feedback:</strong> ${harsherFeedback}`;
 }
 
 function updateCustomWords() {
@@ -994,9 +1031,8 @@ async function importVault(event) {
   reader.readAsText(file);
 }
 
-let phishingDetectionModel; // Variable to hold our TensorFlow.js model
+let phishingDetectionModel; // Variable to hold the TensorFlow.js model
 
-// UPDATE: getUrlFeaturesForPhishingAI (Now extracts 9 features)
 function getUrlFeaturesForPhishingAI(url) {
   let features = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // Now 9 features
   if (!url || typeof url !== "string" || !url.startsWith("http")) {
@@ -1007,7 +1043,6 @@ function getUrlFeaturesForPhishingAI(url) {
     const lowerUrl = url.toLowerCase();
     const urlObj = new URL(url);
     const hostname = urlObj.hostname;
-    // const path = urlObj.pathname; // path is not directly used for new features, but can be for future
 
     // Feature 1: Normalized URL Length
     features[0] = Math.min(lowerUrl.length / 100, 1); // Normalize to max 100 chars
@@ -1327,3 +1362,123 @@ async function checkPhishingUrlAI() {
     .toLowerCase()
     .replace(/ /g, "-")}`;
 }
+
+function showForgotPasswordOptions() {
+  // Alert the user to the irreversible nature of this action
+  if (
+    confirm(
+      "WARNING: If you proceed, your existing vault and ALL stored credentials will be PERMANENTLY DELETED. You will then be able to set up a new, empty vault. This action cannot be undone. Are you sure you want to continue?"
+    )
+  ) {
+    resetVaultAndSetNewMasterPassword();
+  }
+}
+
+function resetVaultAndSetNewMasterPassword() {
+  // Clear everything related to the old vault
+  localStorage.removeItem("vaultx"); // Deletes the encrypted vault data from local storage
+  masterPassword = null; // Clears the master password from memory
+  vaultData = []; // Clears the decrypted vault data from memory
+
+  showAlertDialog(
+    "Your old vault has been deleted. Please set a new master password for your new vault."
+  );
+
+  // Redirect the user to the "Set Master Password" section
+  document.getElementById("unlock-section").style.display = "none"; // Hide unlock section
+  document.getElementById("set-master-password-section").style.display = "flex"; // Show set master password section
+  document.querySelector(".container").style.display = "none"; // Ensure main app content is hidden
+
+  // Clear any input fields that might still hold old data
+  document.getElementById("master-password").value = "";
+  document.getElementById("new-master-password").value = "";
+  document.getElementById("confirm-new-master-password").value = "";
+}
+
+// Ensure your showAlertDialog function is defined, as it's used above.
+// (It's already in your provided script.js, but including a reminder for completeness)
+function showAlertDialog(message) {
+  const dialogBox = document.createElement("div");
+  dialogBox.style.cssText = `
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background-color: white; padding: 20px; border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); z-index: 1000; text-align: center;
+        font-family: 'Inter', sans-serif; color: #333; max-width: 80%;
+        border: 1px solid #ccc;
+    `;
+  const messagePara = document.createElement("p");
+  messagePara.textContent = message;
+  messagePara.style.marginBottom = "15px";
+  const okButton = document.createElement("button");
+  okButton.textContent = "OK";
+  okButton.style.cssText = `
+        background-color: var(--primary-color); color: white; padding: 10px 20px;
+        border: none; border-radius: 5px; cursor: pointer; font-size: 16px;
+    `;
+  okButton.onclick = () => dialogBox.remove();
+  dialogBox.appendChild(messagePara);
+  dialogBox.appendChild(okButton);
+  document.body.appendChild(dialogBox);
+}
+
+const translations = {
+  en: {
+    subtitle: "Your Advanced Personal Cyber Security Vault",
+    unlockTitle: "Unlock Vault",
+    unlockDescription: "Enter your master password to continue.",
+    unlockButton: "Unlock",
+    forgotPassword: "Forgot Master Password?",
+    firstTime: "First time user?",
+    setupVault: "Set up your Vault",
+    // Add more keys as needed...
+  },
+  es: {
+    subtitle: "Tu bóveda personal avanzada de ciberseguridad",
+    unlockTitle: "Desbloquear Bóveda",
+    unlockDescription: "Introduce tu contraseña maestra para continuar.",
+    unlockButton: "Desbloquear",
+    forgotPassword: "¿Olvidaste la contraseña maestra?",
+    firstTime: "¿Primera vez usando?",
+    setupVault: "Configura tu Bóveda",
+  },
+  fr: {
+    subtitle: "Votre coffre-fort personnel de cybersécurité avancé",
+    unlockTitle: "Déverrouiller le Coffre",
+    unlockDescription: "Entrez votre mot de passe maître pour continuer.",
+    unlockButton: "Déverrouiller",
+    forgotPassword: "Mot de passe maître oublié ?",
+    firstTime: "Nouvel utilisateur ?",
+    setupVault: "Configurer votre Coffre",
+  },
+  de: {
+    subtitle: "Ihr fortschrittlicher persönlicher Cybersicherheits-Tresor",
+    unlockTitle: "Tresor entsperren",
+    unlockDescription: "Geben Sie Ihr Master-Passwort ein, um fortzufahren.",
+    unlockButton: "Entsperren",
+    forgotPassword: "Master-Passwort vergessen?",
+    firstTime: "Erstmaliger Benutzer?",
+    setupVault: "Tresor einrichten",
+  },
+};
+
+function changeLanguage(lang) {
+  if (!translations[lang]) return;
+
+  // Save selection
+  localStorage.setItem("vaultx-lang", lang);
+
+  // Update all elements with data-i18n
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
+}
+
+// Load saved language on page load
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem("vaultx-lang") || "en";
+  document.getElementById("language-selector").value = savedLang;
+  changeLanguage(savedLang);
+});

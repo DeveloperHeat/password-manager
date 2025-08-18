@@ -15,52 +15,96 @@
   </head>
   <body>
     <header class="app-header">
-      <h1>VaultX</h1>
-      <p class="subtitle">Your Advanced Personal Cyber Security Vault</p>
+      <h1 data-i18n="appTitle">
+        VaultX
+        <div class="cube-container">
+          <div class="cube">
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+          </div>
+        </div>
+      </h1>
+      <p class="subtitle" data-i18n="subtitle">
+        Your Advanced Personal Cyber Security Vault
+      </p>
     </header>
 
     <main id="app-container">
       <div id="unlock-section" class="auth-container">
         <div class="card">
-          <h2>Unlock Vault</h2>
-          <p>Enter your master password to continue.</p>
+          <h2 data-i18n="unlockTitle">Unlock Vault</h2>
+          <p data-i18n="unlockDescription">
+            Enter your master password to continue.
+          </p>
           <input
             type="password"
             id="master-password"
             placeholder="Master Password"
             class="input-field"
+            data-i18n-placeholder="masterPasswordPlaceholder"
           />
-          <button onclick="unlockVault()" class="btn btn-primary">
+          <button
+            onclick="unlockVault()"
+            class="btn btn-primary"
+            style="margin-top: 17px"
+            data-i18n="unlockButton"
+          >
             Unlock
           </button>
-          <p id="unlock-error" class="error-message" style="display: none">
+          <p class="auth-link" style="margin-top: 17px">
+            <a
+              href="#"
+              onclick="showForgotPasswordOptions()"
+              data-i18n="forgotPasswordLink"
+              >Forgot Master Password?</a
+            >
+          </p>
+          <p
+            id="unlock-error"
+            class="error-message"
+            style="display: none"
+            data-i18n="unlockError"
+          >
             Incorrect master password or corrupted data.
           </p>
           <p class="auth-link">
-            First time user?
-            <a href="#" onclick="showSetMasterPassword()">Set up your Vault</a>
+            <span data-i18n="firstTimeUser">First time user?</span>
+            <a
+              href="#"
+              onclick="showSetMasterPassword()"
+              data-i18n="setupVaultLink"
+              >Set up your Vault</a
+            >
           </p>
         </div>
       </div>
-
       <div id="set-master-password-section" class="auth-container">
         <div class="card">
-          <h2>Set Master Password</h2>
-          <p>
+          <h2 data-i18n="setMasterPasswordTitle">Set Master Password</h2>
+          <p data-i18n="setMasterPasswordDescription">
             This password will encrypt and decrypt your entire vault. Choose a
             strong one!
           </p>
           <div class="form-group">
-            <label for="new-master-password">New Master Password</label>
+            <label for="new-master-password" data-i18n="newMasterPasswordLabel"
+              >New Master Password</label
+            >
             <input
               type="password"
               id="new-master-password"
               placeholder="New Master Password"
               class="input-field"
+              data-i18n-placeholder="newMasterPasswordPlaceholder"
             />
           </div>
           <div class="form-group">
-            <label for="confirm-new-master-password"
+            <label
+              for="confirm-new-master-password"
+              data-i18n="confirmMasterPasswordLabel"
               >Confirm Master Password</label
             >
             <input
@@ -68,207 +112,360 @@
               id="confirm-new-master-password"
               placeholder="Confirm Master Password"
               class="input-field"
+              data-i18n-placeholder="confirmMasterPasswordPlaceholder"
             />
           </div>
-          <button onclick="setNewMasterPassword()" class="btn btn-primary">
+          <button
+            onclick="setNewMasterPassword()"
+            class="btn btn-primary"
+            data-i18n="setMasterPasswordButton"
+          >
             Set Master Password
           </button>
           <p class="auth-link">
-            Already have a vault?
-            <a href="#" onclick="showUnlockVault()">Unlock Vault</a>
+            <span data-i18n="alreadyHaveVault">Already have a vault?</span>
+            <a href="#" onclick="showUnlockVault()" data-i18n="unlockVaultLink"
+              >Unlock Vault</a
+            >
           </p>
         </div>
       </div>
 
-      <div class="container" style="display: none">
-        <div class="main-column">
-          <div class="card">
-            <h2 class="card-title">Add New Credential</h2>
-            <div class="form-group">
-              <label for="site">Website/Service</label>
-              <input
-                type="text"
-                id="site"
-                placeholder="e.g., Google, Facebook"
-                class="input-field"
-              />
-            </div>
-            <div class="form-group">
-              <label for="username">Username/Email</label>
-              <input
-                type="text"
-                id="username"
-                placeholder="e.g., your.email@example.com"
-                class="input-field"
-              />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                type="text"
-                id="password"
-                placeholder="Generated Password or your own"
-                class="input-field"
-              />
-            </div>
-            <button
-              onclick="addPassword()"
-              class="btn btn-primary"
-              id="add-edit-password-btn"
-            >
-              Add Credential
-            </button>
-            <button
-              onclick="cancelEdit()"
-              class="btn btn-secondary"
-              id="cancel-edit-btn"
-              style="display: none"
-            >
-              Cancel Edit
-            </button>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title">Your Stored Credentials</h2>
-            <div class="form-group">
-              <label for="search-vault">Search Vault</label>
-              <input
-                type="text"
-                id="search-vault"
-                class="input-field"
-                placeholder="Search by site or username"
-                onkeyup="displayVault()"
-              />
-            </div>
-            <ul id="password-list">
-              <p>No passwords stored yet. Add one above!</p>
+      <div id="vault-view" class="container" style="display: none">
+        <aside class="sidebar">
+          <nav>
+            <ul id="sidebar-nav">
+              <li>
+                <a
+                  href="#dashboard"
+                  class="nav-link active"
+                  data-i18n="dashboardLink"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#credentials"
+                  class="nav-link"
+                  data-i18n="credentialsLink"
+                  >Credentials</a
+                >
+              </li>
+              <li>
+                <a href="#tools" class="nav-link" data-i18n="toolsLink"
+                  >Tools</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#vault-management"
+                  class="nav-link"
+                  data-i18n="vaultManagementLink"
+                  >Vault Management</a
+                >
+              </li>
             </ul>
-          </div>
-        </div>
+          </nav>
+        </aside>
 
-        <div class="sidebar-column">
-          <div class="card">
-            <h3 class="card-title">Passphrase Generator</h3>
-            <div class="form-group">
-              <label for="theme-selector">Theme</label>
-              <select id="theme-selector" class="input-field">
-                <option value="animals">Animals + Colors</option>
-                <option value="nz">New Zealand Theme</option>
-                <option value="custom">Custom Words</option>
-              </select>
+        <div class="main-content">
+          <section id="dashboard" class="content-section">
+            <div class="card">
+              <h2 data-i18n="dashboardTitle">Dashboard</h2>
+              <p data-i18n="dashboardDescription">
+                Welcome to your secure vault. Use the sidebar to navigate to
+                your credentials and security tools.
+              </p>
             </div>
-            <div class="form-group">
-              <label for="custom-words-input"
-                >Custom Word List (comma-separated)</label
-              >
-              <textarea id="custom-words-input" rows="2" class="input-field">
-Alpha,Bravo,Charlie,Delta,Echo</textarea
-              >
+          </section>
+
+          <section
+            id="credentials"
+            class="content-section"
+            style="display: none"
+          >
+            <div class="card">
+              <h2 class="card-title" data-i18n="addCredentialTitle">
+                Add New Credential
+              </h2>
+              <div class="form-group">
+                <label for="site" data-i18n="websiteLabel"
+                  >Website/Service</label
+                >
+                <input
+                  type="text"
+                  id="site"
+                  placeholder="e.g., Google, Facebook"
+                  class="input-field"
+                  data-i18n-placeholder="websitePlaceholder"
+                />
+              </div>
+              <div class="form-group">
+                <label for="username" data-i18n="usernameLabel"
+                  >Username/Email</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="e.g., your.email@example.com"
+                  class="input-field"
+                  data-i18n-placeholder="usernamePlaceholder"
+                />
+              </div>
+              <div class="form-group">
+                <label for="password" data-i18n="passwordLabel">Password</label>
+                <input
+                  type="text"
+                  id="password"
+                  placeholder="Generated Password or your own"
+                  class="input-field"
+                  data-i18n-placeholder="passwordPlaceholder"
+                />
+              </div>
               <button
-                onclick="updateCustomWords()"
-                class="btn btn-secondary btn-small"
+                onclick="addPassword()"
+                class="btn btn-primary"
+                id="add-edit-password-btn"
+                data-i18n="addCredentialButton"
               >
-                Update Words
+                Add Credential
+              </button>
+              <button
+                onclick="cancelEdit()"
+                class="btn btn-secondary"
+                id="cancel-edit-btn"
+                style="display: none"
+                data-i18n="cancelEditButton"
+              >
+                Cancel Edit
               </button>
             </div>
-            <button onclick="generatePassphrase()" class="btn btn-primary">
-              Generate Passphrase
-            </button>
-            <p class="generated-passphrase-display">
-              <strong>Generated:</strong>
-              <span id="generated-passphrase"></span>
-            </p>
-          </div>
-
-          <div class="card">
-            <h2 class="card-title">Password Breach Checker</h2>
-            <p>
-              Check if your password has appeared in known data breaches.
-              (Password is hashed locally before checking)
-            </p>
-            <div class="form-group">
-              <label for="breach-password">Password to Check</label>
-              <input
-                type="password"
-                id="breach-password"
-                placeholder="Enter password to check"
-                class="input-field"
-              />
+            <div class="card" style="margin-top: 25px">
+              <h2 class="card-title" data-i18n="storedCredentialsTitle">
+                Your Stored Credentials
+              </h2>
+              <div class="form-group">
+                <label for="search-vault" data-i18n="searchVaultLabel"
+                  >Search Vault</label
+                >
+                <input
+                  type="text"
+                  id="search-vault"
+                  class="input-field"
+                  placeholder="Search by site or username"
+                  onkeyup="displayVault()"
+                  data-i18n-placeholder="searchPlaceholder"
+                />
+              </div>
+              <ul id="password-list">
+                <p data-i18n="noPasswordsMessage">
+                  No passwords stored yet. Add one above!
+                </p>
+              </ul>
             </div>
-            <button onclick="checkBreach()" class="btn btn-primary">
-              Check Password
-            </button>
-            <div id="breach-result" class="result-box"></div>
-          </div>
+          </section>
 
-          <div class="card">
-            <h2 class="card-title">Password Strength Tester</h2>
-            <div class="form-group">
-              <label for="test-password">Test Password</label>
+          <section id="tools" class="content-section" style="display: none">
+            <div class="card">
+              <h3 class="card-title" data-i18n="passphraseGeneratorTitle">
+                Passphrase Generator
+              </h3>
+              <div class="form-group">
+                <label for="theme-selector" data-i18n="themeLabel">Theme</label>
+                <select id="theme-selector" class="input-field">
+                  <option value="animals" data-i18n="animalsTheme">
+                    Animals + Colors
+                  </option>
+                  <option value="nz" data-i18n="nzTheme">
+                    New Zealand Theme
+                  </option>
+                  <option value="custom" data-i18n="customTheme">
+                    Custom Words
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="custom-words-input" data-i18n="customWordListLabel"
+                  >Custom Word List (comma-separated)</label
+                >
+                <textarea
+                  id="custom-words-input"
+                  rows="2"
+                  class="input-field"
+                  data-i18n-placeholder="customWordsPlaceholder"
+                >
+Alpha,Bravo,Charlie,Delta,Echo</textarea
+                >
+                <button
+                  onclick="updateCustomWords()"
+                  class="btn btn-secondary btn-small"
+                  data-i18n="updateWordsButton"
+                >
+                  Update Words
+                </button>
+              </div>
+              <button
+                onclick="generatePassphrase()"
+                class="btn btn-primary"
+                data-i18n="generatePassphraseButton"
+              >
+                Generate Passphrase
+              </button>
+              <p class="generated-passphrase-display">
+                <strong data-i18n="generatedLabel">Generated:</strong>
+                <span id="generated-passphrase"></span>
+              </p>
+            </div>
+
+            <div class="card" style="margin-top: 25px">
+              <h2 class="card-title" data-i18n="breachCheckerTitle">
+                Password Breach Checker
+              </h2>
+              <p data-i18n="breachCheckerDescription">
+                Check if your password has appeared in known data breaches.
+                (Password is hashed locally before checking)
+              </p>
+              <div class="form-group">
+                <label for="breach-password" data-i18n="breachPasswordLabel"
+                  >Password to Check</label
+                >
+                <input
+                  type="password"
+                  id="breach-password"
+                  placeholder="Enter password to check"
+                  class="input-field"
+                  data-i18n-placeholder="breachPasswordPlaceholder"
+                />
+              </div>
+              <button
+                onclick="checkBreach()"
+                class="btn btn-primary"
+                data-i18n="checkPasswordButton"
+              >
+                Check Password
+              </button>
+              <div id="breach-result" class="result-box"></div>
+            </div>
+
+            <div class="card" style="margin-top: 25px">
+              <h2 class="card-title" data-i18n="strengthTesterTitle">
+                Password Strength Tester
+              </h2>
+              <div class="form-group">
+                <label for="test-password" data-i18n="testPasswordLabel"
+                  >Test Password</label
+                >
+                <input
+                  type="text"
+                  id="test-password"
+                  placeholder="Enter password to test"
+                  class="input-field"
+                  onkeyup="testPassword(this.value)"
+                  data-i18n-placeholder="testPasswordPlaceholder"
+                />
+              </div>
+              <div class="password-strength-container">
+                <div id="password-strength-meter"></div>
+                <span id="password-strength-text"></span>
+              </div>
+              <div id="crack-result" class="result-box"></div>
+            </div>
+
+            <div class="card" style="margin-top: 25px">
+              <h3 data-i18n="aiPhishingTitle">AI Phishing URL Analyzer</h3>
+              <p data-i18n="aiPhishingDescription">
+                Enter a URL to get an AI-based phishing risk assessment.
+              </p>
               <input
                 type="text"
-                id="test-password"
-                placeholder="Enter password to test"
+                id="phishing-url-input-ai"
+                placeholder="Enter URL (e.g., http://example.com.malicious.xyz/login)"
                 class="input-field"
-                onkeyup="testPassword()"
+                style="width: 100%; margin-bottom: 10px"
+                data-i18n-placeholder="aiPhishingPlaceholder"
               />
+              <button
+                onclick="checkPhishingUrlAI()"
+                class="btn btn-secondary"
+                data-i18n="analyzeUrlButton"
+              >
+                Analyze URL with AI
+              </button>
+              <div id="ai-phishing-result" style="margin-top: 15px">
+                <p>
+                  <strong data-i18n="aiRiskScoreLabel">AI Risk Score:</strong>
+                  <span id="ai-phishing-score">N/A</span>
+                </p>
+                <p>
+                  <strong data-i18n="aiRiskLevelLabel">AI Risk Level:</strong>
+                  <span id="ai-phishing-level">N/A</span>
+                </p>
+                <p>
+                  <strong data-i18n="aiReasonsLabel">AI Reasons:</strong>
+                  <span id="ai-phishing-reasons">N/A</span>
+                </p>
+              </div>
             </div>
-            <div class="password-strength-container">
-              <div id="password-strength-meter"></div>
-              <span id="password-strength-text"></span>
+          </section>
+
+          <section
+            id="vault-management"
+            class="content-section"
+            style="display: none"
+          >
+            <div class="card">
+              <h2 class="card-title" data-i18n="vaultManagementTitle">
+                Vault Management
+              </h2>
+              <div class="info-box" data-i18n="vaultManagementImportant">
+                <strong>Important:</strong> Remember your Master Password! It's
+                the only way to access your encrypted vault. If you forget it,
+                your vault data will be permanently lost.
+              </div>
+              <button
+                onclick="exportVault()"
+                class="btn btn-secondary"
+                style="margin-top: 15px"
+                data-i18n="exportVaultButton"
+              >
+                Export Vault
+              </button>
+              <p class="form-group" style="margin-top: 15px">
+                <label for="import-file" data-i18n="importVaultLabel"
+                  >Import Vault (.json)</label
+                >
+                <input
+                  type="file"
+                  id="import-file"
+                  accept=".json"
+                  class="input-field"
+                  onchange="importVault(event)"
+                />
+              </p>
+              <button
+                onclick="logoutVault()"
+                class="btn btn-primary"
+                style="margin-top: 15px"
+                data-i18n="logoutButton"
+              >
+                Logout (Lock Vault)
+              </button>
+              <button
+                onclick="changeMasterPassword()"
+                class="btn btn-secondary"
+                data-i18n="changePasswordButton"
+              >
+                Change Master Password
+              </button>
+              <button
+                onclick="deleteMasterPassword()"
+                class="btn btn-secondary"
+                data-i18n="deleteVaultButton"
+              >
+                Delete Vault
+              </button>
             </div>
-            <div id="crack-result" class="result-box"></div>
-          </div>
-          <div class="card" style="margin-top: 20px">
-            <h3>AI Phishing URL Analyzer</h3>
-            <p>Enter a URL to get an AI-based phishing risk assessment.</p>
-            <input
-              type="text"
-              id="phishing-url-input-ai"
-              placeholder="Enter URL (e.g., http://example.com.malicious.xyz/login)"
-              class="input-field"
-              style="width: 100%; margin-bottom: 10px"
-            />
-            <button onclick="checkPhishingUrlAI()" class="btn btn-secondary">
-              Analyze URL with AI
-            </button>
-            <div id="ai-phishing-result" style="margin-top: 15px">
-              <p>
-                <strong>AI Risk Score:</strong>
-                <span id="ai-phishing-score">N/A</span>
-              </p>
-              <p>
-                <strong>AI Risk Level:</strong>
-                <span id="ai-phishing-level">N/A</span>
-              </p>
-              <p>
-                <strong>AI Reasons:</strong>
-                <span id="ai-phishing-reasons">N/A</span>
-              </p>
-            </div>
-          </div>
-          <div class="card">
-            <h2 class="card-title">Vault Management</h2>
-            <button onclick="exportVault()" class="btn btn-secondary">
-              Export Vault
-            </button>
-            <p class="form-group" style="margin-top: 15px">
-              <label for="import-file">Import Vault (.json)</label>
-              <input
-                type="file"
-                id="import-file"
-                accept=".json"
-                class="input-field"
-                onchange="importVault(event)"
-              />
-            </p>
-            <button onclick="changeMasterPassword()" class="btn btn-secondary">
-              Change Master Password
-            </button>
-            <button onclick="deleteMasterPassword()" class="btn btn-secondary">
-              Delete Master Password
-            </button>
-          </div>
+          </section>
         </div>
       </div>
     </main>
@@ -277,6 +474,34 @@ Alpha,Bravo,Charlie,Delta,Echo</textarea
     <script src="crypto.js"></script>
     <script src="script.js"></script>
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const navLinks = document.querySelectorAll(".nav-link");
+        const sections = document.querySelectorAll(".content-section");
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Hide all sections
+            sections.forEach((section) => {
+              section.style.display = "none";
+            });
+
+            // Deactivate all links
+            navLinks.forEach((navLink) => {
+              navLink.classList.remove("active");
+            });
+
+            // Get the target section's ID from the href and show it
+            const targetId = e.target.getAttribute("href").substring(1);
+            document.getElementById(targetId).style.display = "block";
+
+            // Activate the clicked link
+            e.target.classList.add("active");
+          });
+        });
+      });
+
       let masterPassword = null;
       let vaultData = [];
       let editIndex = -1; // New variable to track the item being edited
@@ -340,7 +565,7 @@ Alpha,Bravo,Charlie,Delta,Echo</textarea
 
           // If decryption is successful, proceed
           document.getElementById("unlock-section").style.display = "none";
-          document.querySelector(".container").style.display = "flex";
+          document.getElementById("vault-view").style.display = "flex";
           await displayVault();
           resetIdleTimer(); // Start idle timer
         } catch (e) {
@@ -350,6 +575,21 @@ Alpha,Bravo,Charlie,Delta,Echo</textarea
             "Incorrect master password or corrupted data.";
           unlockError.style.display = "block";
           console.error("Decryption error:", e);
+        }
+      }
+
+      function logoutVault() {
+        if (masterPassword) {
+          // Only log out if a vault is currently unlocked
+          showAlertDialog("Vault logged out successfully.");
+          masterPassword = null; // Clear master password from memory
+          vaultData = []; // Clear sensitive data from memory
+          document.getElementById("vault-view").style.display = "none"; // Hide main content
+          document.getElementById("master-password").value = ""; // Clear unlock input
+          document.getElementById("unlock-section").style.display = "flex"; // Show unlock section
+          clearTimeout(idleTimeout); // Clear any pending idle timeout
+        } else {
+          showAlertDialog("No vault is currently unlocked to log out.");
         }
       }
 
@@ -375,6 +615,10 @@ Alpha,Bravo,Charlie,Delta,Echo</textarea
         vaultData = []; // Initialize empty vault if first time
         await saveVault(vaultData);
         showAlertDialog("Master password has been set!");
+        // **NEW ALERT ADDED HERE**
+        showAlertDialog(
+          "IMPORTANT: Please remember your master password! VaultX does NOT store it, and there is no 'forgot password' recovery. If you forget it, your vault and all its data will be permanently lost."
+        );
         newPasswordInput.value = "";
         confirmPasswordInput.value = "";
 
@@ -383,7 +627,7 @@ Alpha,Bravo,Charlie,Delta,Echo</textarea
         document.getElementById("unlock-section").style.display = "none";
         document.getElementById("set-master-password-section").style.display =
           "none";
-        document.querySelector(".container").style.display = "flex";
+        document.getElementById("vault-view").style.display = "flex";
         resetIdleTimer(); // Start idle timer
       }
 
@@ -435,7 +679,7 @@ Alpha,Bravo,Charlie,Delta,Echo</textarea
           showAlertDialog("Vault locked due to inactivity.");
           masterPassword = null;
           vaultData = []; // Clear sensitive data from memory
-          document.querySelector(".container").style.display = "none";
+          document.getElementById("vault-view").style.display = "none";
           document.getElementById("master-password").value = ""; // Clear input
           document.getElementById("unlock-section").style.display = "flex";
           clearTimeout(idleTimeout); // Clear the timeout

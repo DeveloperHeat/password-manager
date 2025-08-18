@@ -1,18 +1,20 @@
-/* General Body & Typography */
 :root {
-  --primary-color: #007aff;
-  --primary-hover: #005ecb;
-  --secondary-color: #6c757d;
-  --secondary-hover: #5a6268;
-  --background-color: #f3f4f5;
-  --card-background: #ffffff;
-  --text-color: #212529;
-  --subtle-text: #6c757d;
-  --border-color: #dee2e6;
-  --success-color: #28a745;
-  --danger-color: #dc3545;
-  --warning-color: #ffc107;
+  --primary-color: #4a90e2;
+  --primary-hover: #5c9ce6;
+  --secondary-color: #327da8;
+  --secondary-hover: gold;
+  --background-color: #0d0c1d;
+  --card-background: #1a192f;
+  --card-background-light: #2a2a4c;
+  --text-color: #f8f8f8;
+  --subtle-text: #a0a0a0;
+  --border-color: #3e3d5a;
+  --success-color: #00f260;
+  --danger-color: #ff4d4d;
+  --warning-color: #ffeb3b;
   --font-family: "Inter", sans-serif;
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  --border-radius: 12px;
 }
 
 body {
@@ -20,181 +22,266 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
   padding: 20px;
+  box-sizing: border-box;
+}
+
+.app-header .header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.input-field-small {
+  padding: 8px;
+  font-size: 0.9em;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
 }
 
 .app-header {
   text-align: center;
   margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 .app-header h1 {
   font-weight: 700;
   color: var(--text-color);
   font-size: 2.5rem;
-  margin: 0;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0;
 }
 
-.app-header .subtitle {
-  font-size: 1.1rem;
+.subtitle {
   color: var(--subtle-text);
   margin-top: 5px;
+  font-weight: 400;
 }
 
 /* Authentication Screens (Unlock / Set Password) */
-.auth-container {
+.auth-container,
+.container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  min-height: 60vh;
+  width: 100%;
+  max-width: 500px;
 }
 
-.auth-container .card {
+/* Main content container for the side-by-side layout */
+.container {
   width: 100%;
-  max-width: 400px;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column; /* Default stacking for mobile */
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 100%;
+  background-color: var(--card-background);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sidebar nav li {
+  margin: 0;
+  flex: 1 1 auto;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: var(--subtle-text);
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s;
+  font-weight: 500;
   text-align: center;
 }
 
-.auth-link {
-  margin-top: 20px;
-  font-size: 0.9rem;
-}
-.auth-link a {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-.auth-link a:hover {
-  text-decoration: underline;
+.sidebar nav a:hover {
+  background-color: var(--card-background-light);
+  color: var(--text-color);
 }
 
-/* Main Application Layout */
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  max-width: 1200px;
-  margin: auto;
+.sidebar nav a.active {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  font-weight: 700;
 }
 
-.main-column {
-  flex: 2;
-  min-width: 300px;
+/* Main Content styling */
+.main-content {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
+  width: 100%;
 }
 
-.sidebar-column {
-  flex: 1;
-  min-width: 300px;
+.content-section {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 
-/* Card Component */
+/* Card Styling */
 .card {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
+  background-color: var(--card-background);
   border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  box-sizing: border-box;
+
+  max-width: none;
 }
 
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+.card h2 {
   margin-top: 0;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-/* Form Elements */
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-}
-
-.form-group input[type="checkbox"] {
-  width: auto; /* Override default input-field width for checkboxes */
-  margin-right: 5px;
-}
-
-.input-field,
-select.input-field,
-textarea.input-field,
-input[type="file"].input-field {
-  /* Added file input styling */
-  display: block;
+/* Form and Input Styling */
+.input-field {
   width: 100%;
   padding: 12px;
-  box-sizing: border-box;
   border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
   border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: var(
-    --background-color
-  ); /* For file input, gives it a background */
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: var(--font-family);
 }
 
 .input-field:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 242, 96, 0.2);
 }
 
-/* Button Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--subtle-text);
+  font-weight: 500;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 .btn {
-  padding: 12px 20px;
+  padding: 12px 25px;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
   font-weight: 600;
-  font-size: 1rem;
-  transition: background-color 0.2s, transform 0.1s;
-  width: 100%;
-  margin-top: 10px;
-  /* Ensure consistent spacing between buttons if they are inline-block */
-  display: block; /* Default to block, specific overrides for small */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  flex-grow: 1; /* Make buttons grow to fill space */
+  text-align: center;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
+.password-strength-container {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#password-strength-meter {
+  height: 10px;
+  background-color: var(--card-background-light);
+  border-radius: 5px;
+  width: 0;
+  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+#password-strength-text {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.btn-small {
+  padding: 8px 15px;
+  font-size: 0.8rem;
+  flex-grow: 0;
 }
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: white;
+  color: var(--background-color);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background-color: #e9ecef;
+  background-color: var(--secondary-color);
   color: var(--text-color);
-  border: 1px solid #ced4da;
 }
 
 .btn-secondary:hover {
-  background-color: #dde1e5;
-}
-
-.btn-small {
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  margin-top: 5px;
-  width: auto;
-  display: inline-block; /* Make small buttons inline */
+  background-color: var(--secondary-hover);
+  transform: translateY(-2px);
 }
 
 .btn-danger {
@@ -203,198 +290,187 @@ input[type="file"].input-field {
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background-color: #e53935;
+  transform: translateY(-2px);
 }
 
-/* Stored Passwords List */
+/* Password List */
 #password-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   list-style: none;
   padding: 0;
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid var(--border-color); /* Added border for the list */
-  border-radius: 8px;
-  margin-top: 15px; /* Spacing after search input */
 }
 
-#password-list li {
-  padding: 15px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  word-break: break-all;
-  flex-wrap: wrap; /* Allow list items to wrap on small screens */
-  gap: 10px; /* Space between text and buttons */
-}
-
-#password-list li > span {
-  /* Styling for the text container */
-  flex-grow: 1;
-  min-width: 150px; /* Ensure text takes up enough space before wrapping */
-}
-
-#password-list li:last-child {
-  border-bottom: none;
-}
-
-/* Tool-specific styles */
-.result-box {
-  margin-top: 15px;
-  padding: 15px;
-  border-radius: 8px;
+.password-item {
   background-color: var(--background-color);
-  font-weight: 500;
   border: 1px solid var(--border-color);
-  word-wrap: break-word;
-}
-
-/* Added for feedback in password strength */
-.result-box ul {
-  list-style: disc inside;
-  margin: 10px 0 0 0;
-  padding-left: 0;
-}
-.result-box ul li {
-  font-size: 0.9em;
-  margin-bottom: 3px;
-  color: var(--subtle-text);
-}
-
-.generated-passphrase-display {
-  margin-top: 15px;
-  font-size: 1.1rem;
-  word-break: break-word;
-  color: var(--success-color);
-  font-weight: 600;
-  border: 1px dashed var(--success-color);
-  padding: 10px;
+  padding: 15px;
   border-radius: 8px;
-  background-color: rgba(40, 167, 69, 0.05);
-  display: block; /* Ensures it takes full width for padding */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: background-color 0.3s;
+  gap: 10px;
 }
 
-.generated-passphrase-display span {
-  font-family: monospace;
+.password-item:hover {
+  background-color: #252525;
+}
+
+.password-details {
+  flex-grow: 1;
+}
+
+.password-details h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.password-details p {
+  margin: 0;
+  color: var(--subtle-text);
+  font-size: 0.9rem;
+}
+
+.item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* AI Phishing Section */
+.phishing-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.phishing-result {
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.phishing-result.success {
+  background-color: rgba(0, 242, 96, 0.2);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.phishing-result.warning {
+  background-color: rgba(255, 235, 59, 0.2);
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
+}
+
+.phishing-result.danger {
+  background-color: rgba(255, 77, 77, 0.2);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
 }
 
 .error-message {
   color: var(--danger-color);
-  font-weight: 500;
-  margin-top: 15px;
-}
-
-/* Breach Checker specific colors */
-#breach-result.found {
-  color: var(--danger-color);
-  background-color: rgba(220, 53, 69, 0.1);
-  border-color: rgba(220, 53, 69, 0.3);
-}
-
-#breach-result.not-found {
-  color: var(--success-color);
-  background-color: rgba(40, 167, 69, 0.1);
-  border-color: rgba(40, 167, 69, 0.3);
-}
-
-/* Password Strength Meter Styles */
-.password-strength-container {
+  text-align: center;
   margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
-#password-strength-meter {
-  height: 8px;
-  width: 100%;
-  background-color: #e0e0e0;
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative;
-}
-
-#password-strength-meter::before {
-  content: "";
-  display: block;
-  height: 100%;
-  width: 0%;
-  border-radius: 4px;
-  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-/* In style.css, add these for the AI phishing display */
-#ai-phishing-result p {
-  margin: 5px 0;
-  font-size: 0.95rem;
-}
-.ai-risk-level-text {
-  font-weight: bold;
-}
-
-/* Color coding for AI risk levels */
-.ai-risk-level-text.risk-very-low-risk,
-.ai-risk-level-text.risk-low-risk {
-  color: var(--success-color); /* Green */
-}
-.ai-risk-level-text.risk-medium-risk {
-  color: var(--warning-color); /* Orange */
-}
-.ai-risk-level-text.risk-high-risk,
-.ai-risk-level-text.risk-very-high-risk {
-  color: var(--danger-color); /* Red */
-}
-
-/* Strength levels */
-#password-strength-meter.strength-0::before {
-  width: 0%;
-  background-color: transparent;
-}
-#password-strength-meter.strength-1::before {
-  width: 20%;
-  background-color: var(--danger-color); /* Very Weak - Red */
-}
-#password-strength-meter.strength-2::before {
-  width: 40%;
-  background-color: var(--danger-color); /* Weak - Red */
-}
-#password-strength-meter.strength-3::before {
-  width: 60%;
-  background-color: var(--warning-color); /* Moderate - Orange */
-}
-#password-strength-meter.strength-4::before {
-  width: 80%;
-  background-color: var(--success-color); /* Strong - Green */
-}
-#password-strength-meter.strength-5::before {
-  width: 100%;
-  background-color: var(--success-color); /* Very Strong - Green */
-}
-
-#password-strength-text {
+.auth-link {
+  text-align: center;
+  margin-top: 15px;
   font-size: 0.9rem;
-  font-weight: 500;
-  min-width: 80px; /* Ensure text space */
-  text-align: right;
+  color: var(--subtle-text);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+.auth-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Grid Layout for larger screens */
+@media (min-width: 900px) {
   .container {
+    flex-direction: row;
+    max-width: 1200px;
+  }
+  .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+  }
+  .sidebar nav ul {
     flex-direction: column;
   }
-  .app-header h1 {
-    font-size: 2rem;
+  .main-content {
+    margin-left: 20px;
   }
-  #password-list li {
-    flex-direction: column; /* Stack items vertically on smaller screens */
-    align-items: flex-start; /* Align text and buttons to the left */
+}
+
+/* Cube Animation */
+.cube-container {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  transform: translateY(-50%);
+  perspective: 100px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 10s infinite linear;
+}
+
+.cube-face {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--primary-color);
+  background: rgba(0, 242, 96, 0.2);
+}
+
+.cube-face:nth-child(1) {
+  transform: rotateY(0deg) translateZ(10px);
+}
+.cube-face:nth-child(2) {
+  transform: rotateY(90deg) translateZ(10px);
+}
+.cube-face:nth-child(3) {
+  transform: rotateY(180deg) translateZ(10px);
+}
+.cube-face:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(10px);
+}
+.cube-face:nth-child(5) {
+  transform: rotateX(90deg) translateZ(10px);
+}
+.cube-face:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(10px);
+}
+
+@keyframes rotateCube {
+  from {
+    transform: rotateX(0deg) rotateY(0deg);
   }
-  #password-list li > span {
-    width: 100%; /* Text takes full width */
-    margin-bottom: 10px; /* Space before buttons */
-  }
-  #password-list li .btn-small {
-    width: calc(50% - 2.5px); /* Two buttons per row */
+  to {
+    transform: rotateX(360deg) rotateY(360deg);
   }
 }
